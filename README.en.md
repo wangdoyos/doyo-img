@@ -1,35 +1,59 @@
-# doyo-img
+<div align="center">
 
-[中文](README.md) | English
+# 🖼️ doyo-img
 
-Lightweight, self-hosted image hosting service. No login required, single binary deployment, get image sharing links instantly.
+**Lightweight, Self-Hosted Image Hosting Service**
 
-## Features
+[![Go Version](https://img.shields.io/badge/Go-1.22+-00ADD8?logo=go)](https://golang.org)
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)](https://reactjs.org)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker)](https://www.docker.com)
 
-- **Multiple Upload Methods** — Drag & drop, Ctrl+V paste, click to select, batch upload support
-- **Instant Sharing** — Auto-generates URL / Markdown / HTML / BBCode formats after upload
-- **No Login Required** — Works out of the box, anyone can upload and access images
-- **Bilingual Support** — Built-in i18n, one-click language switch between Chinese and English
-- **Light/Dark Themes** — Supports light / dark / system-following modes
-- **Upload History** — Browser localStorage persistence, survives page refreshes
-- **Real-time Progress** — Shows upload percentage in real-time
-- **Image Info** — Displays filename, size, dimensions, format
-- **Token-based Deletion** — Each image gets a unique deletion token for secure removal
-- **IP Rate Limiting** — Token bucket algorithm for IP-level request throttling
-- **CORS Support** — Configurable cross-origin policy for third-party embedding
-- **Image Compression** — Optional JPEG/PNG compression
-- **Thumbnails** — Auto-generated thumbnails for faster preview loading
-- **S3 Storage** — Supports AWS S3, Alibaba Cloud OSS, Tencent Cloud COS, MinIO and other S3-compatible storage
-- **Image Watermark** — Optional text/image watermark with custom font support (including Chinese TTF/OTF), position, and opacity
-- **EXIF Auto-stripping** — Automatically removes EXIF metadata (GPS, device info) from JPEG images for privacy protection
-- **SVG Security Sandbox** — Injects CSP headers for SVG responses to block embedded JavaScript execution, preventing Stored XSS
-- **Link Expiration** — Optional expiration time on upload, returns 410 Gone after expiry
-- **Expiration Cleanup** — Scheduled cleanup of expired images with global retention days and per-image expiration dual policy
-- **Environment Variable Override** — YAML config + `DOYO_` prefix environment variables for flexible deployment
-- **Single Binary Deployment** — Go embed for frontend, compiles to single binary
-- **Docker Support** — Dockerfile and docker-compose configurations provided
+[中文](README.md) | 🌐 **English**
 
-## Architecture
+**No login required, single binary deployment, get image sharing links instantly**
+
+</div>
+
+---
+
+## ✨ Features
+
+### 🚀 Core Features
+- 📤 **Multiple Upload Methods** — Drag & drop, Ctrl+V paste, click to select, batch upload support
+- 🔗 **Instant Sharing** — Auto-generates URL / Markdown / HTML / BBCode formats after upload
+- 🔓 **No Login Required** — Works out of the box, anyone can upload and access images
+- 🌐 **Bilingual Support** — Built-in i18n, one-click language switch between Chinese and English
+- 🎨 **Light/Dark Themes** — Supports light / dark / system-following modes
+
+### 💾 Storage & Management
+- 📜 **Upload History** — Browser localStorage persistence, survives page refreshes
+- 📊 **Real-time Progress** — Shows upload percentage in real-time
+- ℹ️ **Image Info** — Displays filename, size, dimensions, format
+- 🗑️ **Token-based Deletion** — Each image gets a unique deletion token for secure removal
+
+### 🔒 Security & Privacy
+- 🛡️ **IP Rate Limiting** — Token bucket algorithm for IP-level request throttling
+- 🌐 **CORS Support** — Configurable cross-origin policy for third-party embedding
+- 🔍 **EXIF Auto-stripping** — Automatically removes EXIF metadata from JPEG images for privacy protection
+- 🔒 **SVG Security Sandbox** — Injects CSP headers for SVG responses to prevent Stored XSS
+
+### 🎨 Image Processing
+- 🗜️ **Image Compression** — Optional JPEG/PNG compression
+- 🖼️ **Thumbnails** — Auto-generated thumbnails for faster preview loading
+- 💧 **Image Watermark** — Optional text/image watermark with custom font support, position, and opacity
+- ⏰ **Link Expiration** — Optional expiration time on upload, returns 410 Gone after expiry
+- 🧹 **Expiration Cleanup** — Scheduled cleanup of expired images with dual policy support
+
+### ☁️ Deployment & Storage
+- ☁️ **S3 Storage** — Supports AWS S3, Alibaba Cloud OSS, Tencent Cloud COS, MinIO and other S3-compatible storage
+- ⚙️ **Environment Variable Override** — YAML config + `DOYO_` prefix environment variables for flexible deployment
+- 📦 **Single Binary Deployment** — Go embed for frontend, compiles to single binary
+- 🐳 **Docker Support** — Dockerfile and docker-compose configurations provided
+
+---
+
+## 🏗️ Architecture
 
 ```
 ┌───────────────────────────────────────────────┐
@@ -60,69 +84,50 @@ Lightweight, self-hosted image hosting service. No login required, single binary
 └───────────────────────────────────────────────┘
 ```
 
-**Backend**: Go + Gin framework, layered architecture (handler → service → storage)
+| Layer | Tech Stack |
+|-------|------------|
+| **Backend** | Go + Gin framework, layered architecture (handler → service → storage) |
+| **Frontend** | React 18 + TypeScript + Vite + Tailwind CSS + Zustand |
+| **Build** | Frontend compiled to static files, embedded in Go binary via `go:embed` |
 
-**Frontend**: React 18 + TypeScript + Vite + Tailwind CSS + Zustand state management
+---
 
-**Build**: Frontend compiled to static files, embedded in Go binary via `go:embed`
-
-## Directory Structure
+## 📁 Directory Structure
 
 ```
 doyo-img/
-├── main.go                    # Entry point: init config, storage, router, start server
-├── embed.go                   # go:embed frontend static resources
-├── config.example.yaml        # Configuration example
-├── Dockerfile                 # Docker multi-stage build
-├── docker-compose.yml         # Docker Compose orchestration
-├── Makefile                   # Common build commands
-├── internal/
-│   ├── config/config.go       # Config definition & loading (Viper)
-│   ├── model/image.go         # Data models (ImageMeta, UploadResult)
-│   ├── storage/
-│   │   ├── storage.go         # Storage interface definition
-│   │   ├── local.go           # Local filesystem storage implementation
-│   │   └── s3.go              # S3-compatible storage implementation (AWS/OSS/COS/MinIO)
-│   ├── service/image.go       # Business logic (upload/get/delete/watermark/EXIF)
-│   ├── handler/
-│   │   ├── upload.go          # POST /api/upload handler
-│   │   ├── image.go           # Image access/info/delete/expiration check
-│   │   └── config_handler.go  # GET /api/config public config
-│   ├── processor/
-│   │   ├── info.go            # Image info extraction (width/height/format)
-│   │   ├── compress.go        # Image compression & thumbnail generation
-│   │   ├── watermark.go       # Text/image watermark processing
-│   │   └── exif.go            # JPEG EXIF metadata stripping
-│   ├── middleware/
-│   │   ├── cors.go            # CORS middleware
-│   │   └── ratelimit.go       # IP rate limiting middleware
-│   ├── router/router.go       # Route registration
-│   ├── cleanup/cleanup.go     # Expired image scheduled cleanup
-│   └── util/
-│       ├── id.go              # Random ID / deletion token generation
-│       ├── validate.go        # MIME detection / format validation
-│       └── response.go        # Unified API response format
-└── web/                       # React frontend
-    ├── src/
-    │   ├── main.tsx           # React entry
-    │   ├── App.tsx            # Root component
-    │   ├── api/client.ts      # API request wrapper
-    │   ├── store/uploadStore.ts # Zustand global state
-    │   ├── i18n/messages.ts   # Chinese/English translations
-    │   ├── components/
-    │   │   ├── layout/        # Header, Footer
-    │   │   ├── upload/        # UploadZone, ExpirySelector
-    │   │   ├── result/        # UploadResult (with expiration badge)
-    │   │   └── common/        # Toast notifications
-    │   ├── hooks/             # useUpload, useTheme, useCopy
-    │   ├── utils/format.ts    # Link generation, file size formatting
-    │   └── types/index.ts     # TypeScript type definitions
-    └── vite.config.ts         # Vite config (with dev proxy)
+├── 📄 main.go                    # Entry point: init config, storage, router, start server
+├── 📄 embed.go                   # go:embed frontend static resources
+├── 📄 config.example.yaml        # Configuration example
+├── 🐳 Dockerfile                 # Docker multi-stage build
+├── 📄 docker-compose.yml         # Docker Compose orchestration
+├── 📄 Makefile                   # Common build commands
+├── 📁 internal/
+│   ├── 📁 config/                # Config definition & loading (Viper)
+│   ├── 📁 model/                 # Data models
+│   ├── 📁 storage/               # Storage interface & implementations
+│   ├── 📁 service/               # Business logic layer
+│   ├── 📁 handler/               # HTTP request handlers
+│   ├── 📁 processor/             # Image processing (compress/watermark/EXIF)
+│   ├── 📁 middleware/            # Middleware (CORS/rate limiting)
+│   ├── 📁 router/                # Route registration
+│   ├── 📁 cleanup/               # Expired image scheduled cleanup
+│   └── 📁 util/                  # Utility functions
+└── 📁 web/                       # React frontend
+    ├── 📁 src/
+    │   ├── 📁 components/        # Components
+    │   ├── 📁 hooks/             # Custom Hooks
+    │   ├── 📁 i18n/              # Internationalization
+    │   ├── 📁 store/             # State management
+    │   └── 📁 utils/             # Utility functions
+    └── ⚙️ vite.config.ts         # Vite config
 ```
 
-## Quick Start
+---
 
-### Run Directly
+## 🚀 Quick Start
+
+### ⚡ Run Directly
 
 ```bash
 # Download release binary, or build from source and run
@@ -131,7 +136,7 @@ doyo-img/
 # Open http://localhost:9090 in browser
 ```
 
-### Docker Deployment
+### 🐳 Docker Deployment
 
 ```bash
 # Clone project
@@ -147,7 +152,7 @@ docker-compose up -d
 # Open http://localhost:9090 in browser
 ```
 
-### Build from Source
+### 🔨 Build from Source
 
 **Prerequisites**: Go 1.22+, Node.js 18+
 
@@ -168,11 +173,13 @@ go build -ldflags="-s -w" -o doyo-img .
 ./doyo-img
 ```
 
-## Local Development
+---
+
+## 💻 Local Development
 
 Frontend and backend development are separated, with frontend dev server proxying API requests to backend automatically.
 
-**1. Configure Development Environment**:
+### 1️⃣ Configure Development Environment
 
 The program looks for `config.yaml` in project root and `./config` directory. Two config templates are provided:
 
@@ -191,13 +198,13 @@ cp config.example.yaml config.yaml
 
 If no `config.yaml` is created, the program uses built-in defaults (equivalent to `config.example.yaml`).
 
-**2. Start Backend** (Terminal 1):
+### 2️⃣ Start Backend (Terminal 1)
 ```bash
 go run .
 # Backend listens on http://localhost:9090
 ```
 
-**3. Start Frontend** (Terminal 2):
+### 3️⃣ Start Frontend (Terminal 2)
 ```bash
 cd web
 npm install
@@ -205,9 +212,9 @@ npm run dev
 # Frontend dev server http://localhost:5173, API requests auto-proxy to :9090
 ```
 
-Frontend Vite dev server is configured with proxy rules (`vite.config.ts`), `/api` and `/i` paths are automatically forwarded to backend.
+---
 
-## Docker Deployment
+## 🐳 Docker Deployment
 
 ### Dockerfile
 
@@ -237,10 +244,12 @@ services:
 ```
 
 **Key Mount Points**:
-- `/app/data` — Image file storage directory, must be persisted
-- `/app/config.yaml` — Config file, `:ro` read-only mount
+- 📁 `/app/data` — Image file storage directory, must be persisted
+- 📄 `/app/config.yaml` — Config file, `:ro` read-only mount
 
-## Configuration
+---
+
+## ⚙️ Configuration
 
 Copy `config.example.yaml` to `config.yaml` and modify as needed:
 
@@ -256,12 +265,7 @@ storage:
   local:
     data_dir: "./data"      # Local storage directory
   s3:                       # S3-compatible storage (when type is "s3")
-    # S3-compatible service Endpoint (without protocol prefix, use_ssl controls http/https)
-    # AWS S3:       s3.amazonaws.com
-    # Alibaba OSS:  oss-cn-hangzhou.aliyuncs.com
-    # Tencent COS:  cos.ap-guangzhou.myqcloud.com
-    # MinIO:        localhost:9000
-    endpoint: ""
+    endpoint: ""            # S3 Endpoint
     bucket: ""
     region: ""
     access_key: ""
@@ -288,55 +292,54 @@ processing:
   strip_exif: true          # Auto-strip EXIF metadata from JPEG
   thumbnail:
     enabled: true           # Generate thumbnails
-    max_width: 300          # Thumbnail max width
-    max_height: 300         # Thumbnail max height
+    max_width: 300
+    max_height: 300
   watermark:
     enabled: false          # Enable watermark
-    type: "text"            # text or image
+    type: "text"            # text | image
     text: "doyo-img"        # Text watermark content
-    font_path: ""           # Custom font path (TTF/OTF), CJK fonts needed for Chinese
+    font_path: ""           # Custom font path (TTF/OTF)
     font_size: 24
     opacity: 0.3            # Opacity 0.0 ~ 1.0
-    position: "bottom-right" # top-left, top-right, bottom-left, bottom-right, center
-    image_path: ""          # Image watermark PNG path (when type is image)
+    position: "bottom-right" # Position options
+    image_path: ""          # Image watermark PNG path
     padding: 20
 
 id:
   length: 8                 # Image ID length
-  alphabet: "0123456789abcdefghijklmnopqrstuvwxyz"  # ID character set
+  alphabet: "0123456789abcdefghijklmnopqrstuvwxyz"
 
 cors:
   allowed_origins:          # Allowed CORS origins
-    - "*"                   # Production: set to specific domains
+    - "*"
 
 rate_limit:
   enabled: true             # Enable IP rate limiting
-  requests_per_minute: 30   # Requests per minute limit
-  burst: 10                 # Burst request allowance
+  requests_per_minute: 30
+  burst: 10
 
 cleanup:
   enabled: false            # Enable expiration cleanup
-  retention_days: 30        # Global retention days, 0 = no time-based cleanup
+  retention_days: 30
 
 log:
   level: "info"             # Log level: debug | info | warn | error
 ```
 
-### Environment Variable Override
+### 🔧 Environment Variable Override
 
-All config options can be overridden via `DOYO_` prefixed environment variables, using `_` as hierarchy separator:
+All config options can be overridden via `DOYO_` prefixed environment variables:
 
 | Config | Environment Variable | Example |
 |--------|---------------------|---------|
 | `server.port` | `DOYO_SERVER_PORT` | `8080` |
 | `server.base_url` | `DOYO_SERVER_BASE_URL` | `https://img.example.com` |
 | `storage.type` | `DOYO_STORAGE_TYPE` | `s3` |
-| `storage.local.data_dir` | `DOYO_STORAGE_LOCAL_DATA_DIR` | `/data/images` |
 | `upload.max_file_size` | `DOYO_UPLOAD_MAX_FILE_SIZE` | `10485760` |
-| `rate_limit.enabled` | `DOYO_RATE_LIMIT_ENABLED` | `false` |
-| `log.level` | `DOYO_LOG_LEVEL` | `debug` |
 
-## API Documentation
+---
+
+## 📡 API Documentation
 
 ### Unified Response Format
 
@@ -352,11 +355,11 @@ All config options can be overridden via `DOYO_` prefixed environment variables,
 
 ---
 
-### POST /api/upload — Upload Image
+### 📤 POST /api/upload — Upload Image
 
 **Request**: `multipart/form-data`, field name `file` (supports multiple files)
 
-Optional field `expire_hours`: Set image expiration time (hours), 0 or omitted means never expire.
+Optional field `expire_hours`: Set image expiration time (hours)
 
 ```bash
 # Single file upload
@@ -394,40 +397,30 @@ curl -X POST -F "file=@photo.jpg" -F "expire_hours=24" http://localhost:9090/api
 }
 ```
 
-> `expires_at` is only returned when expiration time is set.
-
 ---
 
-### GET /i/{id}.{ext} — Direct Image Link
-
-Returns image binary directly, usable in `<img>` tags and Markdown.
+### 🖼️ GET /i/{id}.{ext} — Direct Image Link
 
 ```
 http://localhost:9090/i/a1b2c3d4.jpg          # Original
 http://localhost:9090/i/a1b2c3d4.jpg?t=thumb  # Thumbnail
 ```
 
-Response includes `Cache-Control: public, max-age=31536000, immutable`, browsers and CDNs can cache long-term.
-
-SVG images additionally return `Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; img-src data:; sandbox` header to prevent XSS attacks.
-
-Expired images return `410 Gone`.
+- Response includes `Cache-Control: public, max-age=31536000, immutable`
+- SVG images additionally return CSP header to prevent XSS
+- Expired images return `410 Gone`
 
 ---
 
-### GET /api/image/{id} — Get Image Info
+### ℹ️ GET /api/image/{id} — Get Image Info
 
 ```bash
 curl http://localhost:9090/api/image/a1b2c3d4
 ```
 
-Returns image metadata (ID, name, format, dimensions, size, creation time, etc.).
-
 ---
 
-### DELETE /api/image/{id} — Delete Image
-
-Requires deletion token returned during upload in request header:
+### 🗑️ DELETE /api/image/{id} — Delete Image
 
 ```bash
 curl -X DELETE -H "X-Delete-Token: tok_xxxxxxxxxxxxxxxxxxxxxxxx" \
@@ -436,41 +429,37 @@ curl -X DELETE -H "X-Delete-Token: tok_xxxxxxxxxxxxxxxxxxxxxxxx" \
 
 ---
 
-### GET /api/recent — Recent Uploads List
+### 📜 GET /api/recent — Recent Uploads List
 
 ```bash
 curl http://localhost:9090/api/recent?limit=20
 ```
 
-Parameter `limit` range 1-50, default 20.
-
 ---
 
-### GET /api/config — Get Public Config
+### ⚙️ GET /api/config — Get Public Config
 
 ```bash
 curl http://localhost:9090/api/config
 ```
 
-Returns frontend-required config info (file size limits, allowed formats, watermark status, expiration settings), without sensitive information.
+---
 
-## Production Deployment
+## 🚀 Production Deployment
 
-### HTTPS Deployment (Nginx Reverse Proxy)
+### 🔒 HTTPS Deployment (Nginx Reverse Proxy)
 
-doyo-img itself listens on HTTP, production environments terminate TLS via Nginx:
-
-**1. Configure `config.yaml`**:
+**1️⃣ Configure `config.yaml`**:
 ```yaml
 server:
   base_url: "https://img.example.com"
 cors:
   allowed_origins:
     - "https://img.example.com"
-    - "https://your-blog.com"   # Sites that need to embed images
+    - "https://your-blog.com"
 ```
 
-**2. Nginx Config**:
+**2️⃣ Nginx Config**:
 ```nginx
 server {
     listen 443 ssl http2;
@@ -479,7 +468,7 @@ server {
     ssl_certificate     /etc/ssl/certs/img.example.com.pem;
     ssl_certificate_key /etc/ssl/private/img.example.com.key;
 
-    client_max_body_size 10m;  # Match upload.max_file_size
+    client_max_body_size 10m;
 
     location / {
         proxy_pass http://127.0.0.1:9090;
@@ -488,14 +477,6 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header X-Forwarded-Host $host;
-    }
-
-    # Image direct link cache policy (optional, server already sets Cache-Control)
-    location /i/ {
-        proxy_pass http://127.0.0.1:9090;
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_cache_valid 200 365d;
     }
 }
 
@@ -506,84 +487,63 @@ server {
 }
 ```
 
-**3. HTTPS Deployment Checklist**:
+**3️⃣ HTTPS Deployment Checklist**:
 
 | Config | Description |
 |--------|-------------|
-| `server.base_url` | **Required** Set to full HTTPS domain, otherwise generated links are HTTP |
+| `server.base_url` | **Required** Set to full HTTPS domain |
 | `cors.allowed_origins` | Set to specific HTTPS domain list, don't use `*` in production |
-| Nginx `client_max_body_size` | Must be ≥ `upload.max_file_size`, otherwise large uploads are blocked by Nginx |
-| Nginx `X-Forwarded-Proto` | Ensure it's passed, backend uses this to determine protocol for correct links |
+| Nginx `client_max_body_size` | Must be ≥ `upload.max_file_size` |
 
-### Apache Reverse Proxy
+---
 
-```apache
-<VirtualHost *:443>
-    ServerName img.example.com
-    SSLEngine on
-    SSLCertificateFile /etc/ssl/certs/img.example.com.pem
-    SSLCertificateKeyFile /etc/ssl/private/img.example.com.key
+## 🛡️ Security Hardening Recommendations
 
-    ProxyPreserveHost On
-    ProxyPass / http://127.0.0.1:9090/
-    ProxyPassReverse / http://127.0.0.1:9090/
+- ✅ Set `cors.allowed_origins` to specific domain whitelist in production
+- ✅ Enable rate limiting `rate_limit.enabled: true`
+- ✅ SVG files have built-in CSP sandbox headers for XSS protection (automatic)
+- ✅ JPEG uploads auto-strip EXIF privacy data
+- ✅ Regular backup of `data/` directory
+- ✅ Use `cleanup.enabled: true` to prevent unlimited storage growth
 
-    RequestHeader set X-Forwarded-Proto "https"
-    RequestHeader set X-Forwarded-Host "img.example.com"
-</VirtualHost>
-```
+---
 
-### Security Hardening Recommendations
+## ❓ FAQ
 
-- Production: Set `cors.allowed_origins` to specific domain whitelist
-- Enable rate limiting `rate_limit.enabled: true`, adjust parameters based on actual traffic
-- SVG files have built-in `Content-Security-Policy` sandbox headers for XSS protection (automatic)
-- JPEG uploads auto-strip EXIF privacy data (`strip_exif: true` default on)
-- Regular backup of `data/` directory (local storage mode)
-- Use `cleanup.enabled: true` to prevent unlimited storage growth
-
-## FAQ
-
-### Image links are HTTP instead of HTTPS after upload
-
-Ensure one of the following:
+### Q: Image links are HTTP instead of HTTPS after upload
+**A:** Ensure one of the following:
 1. Set `server.base_url: "https://your-domain.com"` in `config.yaml`
 2. Reverse proxy correctly passes `X-Forwarded-Proto: https` header
 
-### Nginx returns 413 Request Entity Too Large
-
-Nginx's `client_max_body_size` defaults to 1MB, increase in Nginx config:
+### Q: Nginx returns 413 Request Entity Too Large
+**A:** Increase in Nginx config:
 ```nginx
 client_max_body_size 10m;
 ```
 
-### Image data lost in Docker container
-
-Ensure persistent volume is mounted:
+### Q: Image data lost in Docker container
+**A:** Ensure persistent volume is mounted:
 ```yaml
 volumes:
   - ./data:/app/data
 ```
 
-### CORS requests blocked
+### Q: CORS requests blocked
+**A:** Add request origin domain to `cors.allowed_origins` in `config.yaml`
 
-Add request origin domain to `cors.allowed_origins` in `config.yaml`:
-```yaml
-cors:
-  allowed_origins:
-    - "https://your-blog.com"
-    - "https://another-site.com"
-```
+---
 
-### Rate limiting triggered (429 Too Many Requests)
+## 📋 Release Roadmap
 
-Adjust rate limiting config or disable for trusted clients:
-```yaml
-rate_limit:
-  requests_per_minute: 60
-  burst: 20
-```
+| Version | Planned Date | Major Features |
+|---------|-------------|----------------|
+| v1.0.0 | Mar 2026 | 🎉 First stable release |
+| v1.1.0 | Apr 2026 | 📊 Admin dashboard, analytics panel |
+| v1.2.0 | May 2026 | 🔐 User system, private image hosting |
+| v2.0.0 | Q3 2026 | 🚀 Distributed deployment, cluster support |
 
-## License
+---
 
-[MIT](LICENSE)
+## 📄 License
+
+[MIT](LICENSE) © 2026 doyo-img
