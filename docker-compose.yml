@@ -1,0 +1,13 @@
+services:
+  doyo-img:
+    build: .
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./data:/app/data
+      - ./config.yaml:/app/config.yaml:ro
+    restart: unless-stopped
+    environment:
+      - DOYO_SERVER_PORT=9090
+      # HTTPS 反向代理部署时，设置外部可访问的基础 URL
+      # - DOYO_SERVER_BASE_URL=https://img.example.com
