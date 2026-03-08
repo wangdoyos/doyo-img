@@ -1,3 +1,4 @@
+name: doyo
 services:
   doyo-img:
     build: .
