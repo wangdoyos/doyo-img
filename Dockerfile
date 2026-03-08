@@ -7,8 +7,11 @@ COPY web/ .
 RUN npm run build
 
 # Build stage - Backend
-FROM golang:1.24-alpine AS backend
-RUN apk add --no-cache git
+FROM golang:1.25-alpine AS backend
+RUN apk add --no-cache git ca-certificates
+# 设置 Go 代理为阿里云镜像，并允许回退到直接连接
+ENV GOPROXY=https://mirrors.aliyun.com/goproxy/,https://goproxy.cn,direct
+
 WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
