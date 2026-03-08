@@ -1,14 +1,63 @@
+# doyo-img Docker Compose 配置
+# 官方文档: https://github.com/wangdoyos/doyo-img
+#
+# 快速开始:
+#   1. 复制配置: cp config.example.yaml config.yaml
+#   2. 启动服务: docker-compose up -d
+#   3. 访问: http://localhost:9090
+#
+# 使用 Docker Hub 镜像（推荐生产环境）:
+#   将 build: . 替换为 image: wangdoyos/doyo-img:latest
+
 name: doyo
 services:
   doyo-img:
+    # 本地构建方式（开发/自定义）
     build: .
+    
+    # Docker Hub 方式（生产环境推荐，取消下面注释使用）
+    # image: wangdoyos/doyo-img:latest
+    
+    container_name: doyo-img
+    
     ports:
+      # 映射端口: 宿主机端口:容器端口
       - "9090:9090"
+    
     volumes:
+      # 数据持久化: 图片存储目录（必须）
+      # 建议使用绝对路径或确保目录存在
       - ./data:/app/data
+      
+      # 配置文件挂载（只读）
+      # 先复制 config.example.yaml 为 config.yaml 并修改
       - ./config.yaml:/app/config.yaml:ro
+    
     restart: unless-stopped
+    
     environment:
+      # 服务端口，与 ports 映射保持一致
       - DOYO_SERVER_PORT=9090
-      # HTTPS 反向代理部署时，设置外部可访问的基础 URL
+      
+      # HTTPS 反向代理部署时，设置为外部可访问的基础 URL
+      # 示例: https://img.example.com
       # - DOYO_SERVER_BASE_URL=https://img.example.com
+      
+      # 其他常用环境变量（可选）
+      # - DOYO_STORAGE_TYPE=local
+      # - DOYO_UPLOAD_MAX_FILE_SIZE=10485760
+      # - DOYO_LOG_LEVEL=info
+    
+    # 日志轮转配置（可选，防止日志无限增长）
+    # logging:
+    #   driver: "json-file"
+    #   options:
+    #     max-size: "10m"
+    #     max-file: "3"
+    
+    # 健康检查（可选）
+    # healthcheck:
+    #   test: ["CMD", "wget", "-q", "--spider", "http://localhost:9090/api/config"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
