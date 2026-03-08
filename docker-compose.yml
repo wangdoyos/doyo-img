@@ -7,7 +7,7 @@
 #   3. 访问: http://localhost:9090
 #
 # 使用 Docker Hub 镜像（推荐生产环境）:
-#   将 build: . 替换为 image: wangdoyos/doyo-img:latest
+#   将 build: . 替换为 image: wangdoyo/doyo-img:latest
 
 name: doyo
 services:
@@ -16,7 +16,7 @@ services:
     build: .
     
     # Docker Hub 方式（生产环境推荐，取消下面注释使用）
-    # image: wangdoyos/doyo-img:latest
+    # image: wangdoyo/doyo-img:latest
     
     container_name: doyo-img
     

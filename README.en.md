@@ -178,7 +178,7 @@ docker run -d \
   -v $(pwd)/data:/app/data \
   -v $(pwd)/config.yaml:/app/config.yaml:ro \
   --restart unless-stopped \
-  wangdoyos/doyo-img:latest
+  wangdoyo/doyo-img:latest
 ```
 
 #### Docker Compose Deployment (Recommended)
@@ -189,7 +189,7 @@ Create `docker-compose.yml`:
 name: doyo
 services:
   doyo-img:
-    image: wangdoyos/doyo-img:latest
+    image: wangdoyo/doyo-img:latest
     container_name: doyo-img
     ports:
       - "9090:9090"
@@ -781,7 +781,7 @@ docker logs -f doyo-img
 ```yaml
 services:
   doyo-img:
-    image: wangdoyos/doyo-img:latest
+    image: wangdoyo/doyo-img:latest
     logging:
       driver: "json-file"
       options:
