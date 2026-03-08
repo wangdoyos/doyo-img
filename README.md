@@ -216,8 +216,59 @@ docker-compose up -d
 | `latest` | 最新稳定版本 | 开发测试 |
 | `v1.x.x` | 特定版本 | 生产环境（推荐） |
 | `v1` | 最新 v1 版本 | 平衡稳定和更新 |
+| `amd64` | x86_64 架构 | Intel/AMD 处理器服务器 |
+| `arm64` | ARM64 架构 | Apple Silicon/ARM 处理器服务器 |
 
 查看所有可用标签：[Docker Hub Tags](https://hub.docker.com/r/wangdoyo/doyo-img/tags)
+
+#### 架构版本选择
+
+Docker Hub 提供了多架构镜像，请根据您的服务器架构选择对应版本：
+
+**1. 检测服务器架构**
+
+```bash
+# Linux/macOS
+uname -m
+```
+
+| 输出结果 | 对应架构 | 应使用的镜像标签 |
+|---------|---------|----------------|
+| `x86_64` | AMD64 | `amd64` 或 `latest` |
+| `aarch64` | ARM64 | `arm64` |
+| `arm64` | ARM64 | `arm64` |
+
+**2. 拉取对应版本**
+
+```bash
+# AMD64 架构（大多数云服务器）
+docker pull wangdoyo/doyo-img:amd64
+
+# ARM64 架构（Apple Silicon、树莓派、部分云服务器）
+docker pull wangdoyo/doyo-img:arm64
+```
+
+**3. 运行指定架构版本**
+
+```bash
+# AMD64 版本
+docker run -d \
+  --name doyo-img \
+  -p 9090:9090 \
+  -v $(pwd)/data:/app/data \
+  -v $(pwd)/config.yaml:/app/config.yaml:ro \
+  --restart unless-stopped \
+  wangdoyo/doyo-img:amd64
+
+# ARM64 版本
+docker run -d \
+  --name doyo-img \
+  -p 9090:9090 \
+  -v $(pwd)/data:/app/data \
+  -v $(pwd)/config.yaml:/app/config.yaml:ro \
+  --restart unless-stopped \
+  wangdoyo/doyo-img:arm64
+```
 
 #### 更新镜像
 

@@ -216,8 +216,59 @@ docker-compose up -d
 | `latest` | Latest stable version | Development/Testing |
 | `v1.x.x` | Specific version | Production (Recommended) |
 | `v1` | Latest v1 version | Balance stability and updates |
+| `amd64` | x86_64 architecture | Intel/AMD processor servers |
+| `arm64` | ARM64 architecture | Apple Silicon/ARM processor servers |
 
 View all available tags: [Docker Hub Tags](https://hub.docker.com/r/wangdoyo/doyo-img/tags)
+
+#### Architecture Selection
+
+Docker Hub provides multi-architecture images. Please choose the appropriate version based on your server architecture:
+
+**1. Check Server Architecture**
+
+```bash
+# Linux/macOS
+uname -m
+```
+
+| Output | Architecture | Image Tag to Use |
+|--------|-------------|------------------|
+| `x86_64` | AMD64 | `amd64` or `latest` |
+| `aarch64` | ARM64 | `arm64` |
+| `arm64` | ARM64 | `arm64` |
+
+**2. Pull the Appropriate Version**
+
+```bash
+# AMD64 architecture (most cloud servers)
+docker pull wangdoyo/doyo-img:amd64
+
+# ARM64 architecture (Apple Silicon, Raspberry Pi, some cloud servers)
+docker pull wangdoyo/doyo-img:arm64
+```
+
+**3. Run Specific Architecture Version**
+
+```bash
+# AMD64 version
+docker run -d \
+  --name doyo-img \
+  -p 9090:9090 \
+  -v $(pwd)/data:/app/data \
+  -v $(pwd)/config.yaml:/app/config.yaml:ro \
+  --restart unless-stopped \
+  wangdoyo/doyo-img:amd64
+
+# ARM64 version
+docker run -d \
+  --name doyo-img \
+  -p 9090:9090 \
+  -v $(pwd)/data:/app/data \
+  -v $(pwd)/config.yaml:/app/config.yaml:ro \
+  --restart unless-stopped \
+  wangdoyo/doyo-img:arm64
+```
 
 #### Updating the Image
 
