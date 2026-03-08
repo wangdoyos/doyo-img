@@ -217,7 +217,7 @@ docker-compose up -d
 | `v1.x.x` | Specific version | Production (Recommended) |
 | `v1` | Latest v1 version | Balance stability and updates |
 
-View all available tags: [Docker Hub Tags](https://hub.docker.com/r/wangdoyos/doyo-img/tags)
+View all available tags: [Docker Hub Tags](https://hub.docker.com/r/wangdoyo/doyo-img/tags)
 
 #### Updating the Image
 

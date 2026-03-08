@@ -217,7 +217,7 @@ docker-compose up -d
 | `v1.x.x` | 特定版本 | 生产环境（推荐） |
 | `v1` | 最新 v1 版本 | 平衡稳定和更新 |
 
-查看所有可用标签：[Docker Hub Tags](https://hub.docker.com/r/wangdoyos/doyo-img/tags)
+查看所有可用标签：[Docker Hub Tags](https://hub.docker.com/r/wangdoyo/doyo-img/tags)
 
 #### 更新镜像
 
